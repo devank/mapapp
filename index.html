@@ -1,13 +1,68 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>
+MapTaxio
+</title>
+
+<script
+src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
+</script>
+
+<script>
+var geocoder, map;
+function initialize() {
+	geocoder = new google.maps.Geocoder();
+	var latlng = new google.maps.LatLng(10, 10);
+	var myOptions = {    zoom: 12,     center: latlng,    mapTypeId: google.maps.MapTypeId.ROADMAP  }
+	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	getLocation();
+	getCabLocation();
+}
+function getLocation() {
+	var address = document.getElementById('location').value;
+	geocoder.geocode( { 'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({ 
+				map: map, position: results[0].geometry.location });
+		}
+		else {
+			alert("Search was not successful : " + status);
+    		}
+  	});
+}
+function getCabLocation() {
+	var cabLocation = new Array("vytila","ernakulam","aluva","kakkanad","edappally");
+        for(i=0;i<cabLocation.length;i++){
+	var address = cabLocation[i];
+        geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({ 
+                                map: map, icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png', 
+				position: results[0].geometry.location });
+                }
+                else {
+                        alert("Search was not successful : " + status);
+                }
+        });
+	}
+}
+</script>
+
+</head>
+
 <body>
-
-<h1>Get Your Cab</h1>
-
-<form name="input" action="" method="get">
-Location: <input type="text" name="user">
-<input type="submit" value="Submit">
+<br>
+<center><b>Enter Your Location in Cochin and Click on Submit Button ("Enter" Won't work)<br>to get the Cabs Nearer<b>
+<br>
+<form action="" method ="post" >
+        Location: <input type="text" id="location">
+        <input type="button" value="Submit" onclick=initialize()>
 </form>
-
+<br><br>
+<div id="map_canvas" style="width: 800px; height: 450px;"></div>
+</center>
 </body>
 </html>
-
