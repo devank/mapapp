@@ -1,0 +1,30 @@
+{
+  "name": "maptaxio",
+  "version": "0.0.0",
+  "description": "app to get Nearest Cab in Kochi",
+  "main": "web.js",
+  "dependencies": {
+    "ejs": "~0.8.5",
+    "express": "~3.4.8",
+    "geohash": "~0.0.1",
+    "googlemaps": "~0.1.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devank/maptaxio.git"
+  },
+  "keywords": [
+    "node",
+    "heroku"
+  ],
+  "author": "Devan K",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devank/maptaxio/issues"
+  },
+  "homepage": "https://github.com/devank/maptaxio"
+}
