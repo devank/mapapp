@@ -6,48 +6,75 @@ MapTaxio
 </title>
 
 <script
-src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
+src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false&libraries=geometry">
 </script>
 
 <script>
-var geocoder, map;
+var geocoder, map, cabLocation = new Array(["vytila",9.968,76.3179999],
+						["ernakulam",9.98,76.279999],["aluva",10.1049398,76.3511945],
+						["kakkanad",10.0158605,76.3418666], ["edappally", 10.031584,76.303444]);
+//function to initialize app
 function initialize() {
-	geocoder = new google.maps.Geocoder();
-	var latlng = new google.maps.LatLng(10, 10);
-	var myOptions = {    zoom: 12,     center: latlng,    mapTypeId: google.maps.MapTypeId.ROADMAP  }
-	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	getLocation();
-	getCabLocation();
+        geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(10, 10);
+        var myOptions = {    zoom: 11,     center: latlng,    mapTypeId: google.maps.MapTypeId.ROADMAP  }
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        getLocation();
 }
+//function to get details of current location and mark it red
 function getLocation() {
-	var address = document.getElementById('location').value;
-	geocoder.geocode( { 'address': address}, function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
-			map.setCenter(results[0].geometry.location);
-			var marker = new google.maps.Marker({ 
-				map: map, position: results[0].geometry.location });
-		}
-		else {
-			alert("Search was not successful : " + status);
-    		}
-  	});
-}
-function getCabLocation() {
-	var cabLocation = new Array("vytila","ernakulam","aluva","kakkanad","edappally");
-        for(i=0;i<cabLocation.length;i++){
-	var address = cabLocation[i];
+        var address = document.getElementById('location').value;
         geocoder.geocode( { 'address': address}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
+                        var locationLat = results[0].geometry.location.lat();
+                        var locationLong = results[0].geometry.location.lng();
+                        getCabDistance(locationLat,locationLong);
                         map.setCenter(results[0].geometry.location);
-                        var marker = new google.maps.Marker({ 
-                                map: map, icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png', 
-				position: results[0].geometry.location });
+                        var marker = new google.maps.Marker({
+                                map: map, position: results[0].geometry.location });
                 }
                 else {
                         alert("Search was not successful : " + status);
                 }
         });
+}
+//function to create distances from each point and to find nearest one 
+function getCabDistance(locationLat,locationLong) {
+	var cabDistance = new Array();
+	for(var i = 0 ; i<cabLocation.length; i++){
+		var p1 = new google.maps.LatLng(locationLat,locationLong);
+		var p2 = new google.maps.LatLng(cabLocation[i][1],cabLocation[i][2]);
+		cabDistance[i] = (google.maps.geometry.spherical.computeDistanceBetween(p1, p2) / 1000).toFixed(2);        
 	}
+	var distance = 50;
+	var nearestCab = -1;
+	for(var i = 0 ; i<cabLocation.length; i++){
+		if(cabDistance[i] < distance){
+			distance =   cabDistance[i];
+			nearestCab = i ;
+		}      	
+	} 
+	if(distance == 50){
+		alert("Sorry ! You are too far away !");
+	}
+	else{
+		getCabLocation(nearestCab);
+	}
+}
+//function to mark nearest cab location in green
+function getCabLocation(i){
+        var address = cabLocation[i][0];
+        geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                                map: map, icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                                position: results[0].geometry.location });
+                }
+                else {
+                        alert("Search was not successful : " + status);
+                }
+        });
 }
 </script>
 
@@ -55,7 +82,7 @@ function getCabLocation() {
 
 <body>
 <br>
-<center><b>Enter Your Location in Cochin and Click on Submit Button ("Enter" Won't work)<br>to get the Cabs Nearer<b>
+<center><b>Enter Your Location in Cochin and Click on Submit Button ("Enter" Won't work)<br>to get the Cabs Nearer</b>
 <br>
 <form action="" method ="post" >
         Location: <input type="text" id="location">
@@ -66,3 +93,5 @@ function getCabLocation() {
 </center>
 </body>
 </html>
+
+
