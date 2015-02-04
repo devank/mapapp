@@ -1,5 +1,5 @@
 {
-  "name": "maptaxio",
+  "name": "mapapp",
   "version": "0.0.0",
   "description": "app to get Nearest Cab in Kochi",
   "main": "web.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/devank/maptaxio.git"
+    "url": "https://github.com/devank/mapapp.git"
   },
   "keywords": [
     "node",
@@ -28,7 +28,7 @@
   "author": "Devan K",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/devank/maptaxio/issues"
+    "url": "https://github.com/devank/mapapp/issues"
   },
-  "homepage": "https://github.com/devank/maptaxio"
+  "homepage": "https://github.com/devank/mapapp"
 }
